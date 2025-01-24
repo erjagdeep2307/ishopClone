@@ -10,8 +10,8 @@ export default function View() {
   useEffect(() => {
     fetchProduct();
   }, []);
-  const handleDelete = (id, image_name) => {
-    const API = BASE_URL + PRODUCT_URL + "/" + id + "/delete/" + image_name;
+  const handleDelete = (id) => {
+    const API = BASE_URL + PRODUCT_URL + "/delete/" + id ;
     axios
       .delete(API)
       .then((response) => {
@@ -81,6 +81,7 @@ export default function View() {
                       <td className="px-6 py-4">
                         <img
                           src={`${BASE_URL + "/images/" + item.image}`}
+                          alt="No Image"
                           className="w-20"
                         />
                       </td>
@@ -93,7 +94,7 @@ export default function View() {
                             className="cursor-pointer"
                             color="#ff0000"
                             onClick={() => {
-                              handleDelete(item._id, item.image);
+                              handleDelete(item._id);
                             }}
                           />
                           <Link to={`/admin/category/edit/${item._id}`}>

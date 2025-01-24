@@ -3,26 +3,62 @@ import { Link } from "react-router-dom";
 import { useRef, useContext } from "react";
 import { Context } from "../../../Pages/MainContext";
 import { handleRef } from "../../../Utility";
+import { useState } from "react";
 import axios from "axios";
 
 export default function Add() {
-  const { showToast, fetchCategory, BASE_URL, CATEGORY_URL } = useContext(Context);
+  const [imagePreview, setImagePreview] = useState(null);
+  
+  const { showToast,BASE_URL,PRODUCT_URL } =
+  useContext(Context);
   const nameRefs = useRef("");
   const slugRefs = useRef("");
   const actPriceRefs = useRef(0);
   const discountRefs = useRef(0);
   const finalPriceRefs = useRef(0);
-
-  const finalPriceCal = () => {
-    if (actPriceRefs.current.value !== undefined && actPriceRefs.current.value !== "") {
-      const actualPrice = parseFloat(actPriceRefs.current.value);
-      const discount = discountRefs.current.value ? parseFloat(discountRefs.current.value) : 0;
-      const finalPrice = actualPrice - (actualPrice * (discount / 100));
-      finalPriceRefs.current.value = finalPrice.toFixed(2);
+  const handleImageChange = (e)=>{
+    e.preventDefault();
+    if(e.target.files.length>0){
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
     }
     else{
-      finalPriceRefs.current.value=0;
+      setImagePreview(null);
     }
+  }
+  const finalPriceCal = () => {
+    if (
+      actPriceRefs.current.value !== undefined &&
+      actPriceRefs.current.value !== ""
+    ) {
+      const actualPrice = parseFloat(actPriceRefs.current.value);
+      const discount = discountRefs.current.value
+        ? parseFloat(discountRefs.current.value)
+        : 0;
+      const finalPrice = actualPrice - actualPrice * (discount / 100);
+      finalPriceRefs.current.value = finalPrice.toFixed(2);
+    } else {
+      finalPriceRefs.current.value = 0;
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const API_URL=BASE_URL+PRODUCT_URL+"/create";
+    const newFormData = new FormData();
+    newFormData.append("product_name", nameRefs.current.value);
+    newFormData.append("slug", slugRefs.current.value);
+    newFormData.append("act_price", actPriceRefs.current.value);
+    newFormData.append("discount", discountRefs.current.value);
+    newFormData.append("original_price", finalPriceRefs.current.value);
+    newFormData.append("image", e.target.product_image.files[0]);
+    e.target.reset();
+    axios.post(API_URL,newFormData)
+    .then((response)=>{
+        showToast(response.data.message,response.data.flag);
+    })
+    .catch((err)=>{
+      console.log(err);
+      // showToast("")
+    })
   };
 
   return (
@@ -37,7 +73,7 @@ export default function Add() {
         </Link>
       </div>
       <div className="p-4 mt-3">
-        <form className="">
+        <form className="" onSubmit={handleSubmit}>
           {/* Row 1 */}
           <div className="flex gap-x-6 mb-6">
             <div className="w-full relative">
@@ -47,9 +83,8 @@ export default function Add() {
               <input
                 ref={nameRefs}
                 type="text"
-                id="category-name"
                 className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
-                placeholder="Enter the category name"
+                placeholder="Enter the Product Name"
                 required
                 onChange={() => handleRef(nameRefs.current, slugRefs.current)}
               />
@@ -61,7 +96,6 @@ export default function Add() {
               <input
                 ref={slugRefs}
                 type="text"
-                id="category_slug"
                 className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
                 placeholder="etc. accesseries,laptop,phone"
                 readOnly
@@ -78,9 +112,8 @@ export default function Add() {
               <input
                 ref={actPriceRefs}
                 type="number"
-                id="actual-price"
                 className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
-                placeholder="Enter the category name"
+                placeholder="Enter the Price"
                 onChange={finalPriceCal}
                 required
               />
@@ -92,7 +125,6 @@ export default function Add() {
               <input
                 ref={discountRefs}
                 type="number"
-                id="category_slug"
                 onChange={finalPriceCal}
                 defaultValue={0}
                 className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
@@ -105,7 +137,6 @@ export default function Add() {
               <input
                 ref={finalPriceRefs}
                 type="number"
-                id="original_price"
                 className="block w-full h-11 px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
                 readOnly
               />
@@ -118,12 +149,21 @@ export default function Add() {
             </label>
             <input
               type="file"
-              id="category_image"
-              className="block w-full px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none "
-              placeholder=""
+              name="product_image"
+              className="block w-full px-5 py-2.5 bg-white leading-7 text-base font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded placeholder-gray-400 focus:outline-none"
+              required
+              onChange={handleImageChange}
             />
           </div>
-
+          {imagePreview && (
+            <div className="w-40 h-40 mb-6">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-full object-cover rounded-lg shadow-md"
+              />
+            </div>
+          )}
           <button className="py-2 px-4 shadow-sm rounded bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 text-white text-base font-semibold leading-7">
             Add
           </button>

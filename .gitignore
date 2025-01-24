@@ -1,6 +1,8 @@
 # Node.js dependencies
+BACKEND/node_modules/
+FRONTEND/node_modules/
 node_modules/
-.env
+BACKEND/.env
 *.log
 npm-debug.log*
 yarn-debug.log*

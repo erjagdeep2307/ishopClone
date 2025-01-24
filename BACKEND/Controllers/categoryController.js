@@ -69,7 +69,7 @@ const CategoryController = {
 
     read(req, res) {
         try {
-            let categoryData = "";
+            // let categoryData = "";
             if (req.params.id) {
                 const id = (req.params.id)?.trim();
                 CategoryModel.findById(id)
