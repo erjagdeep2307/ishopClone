@@ -10,12 +10,12 @@ export default function Sidebar() {
         {
           menu: "dashboard",
           icon: <BiSolidDashboard />,
-          url: "/admin",
+          url: "/admin/admin",
         },
         {
           menu: "analysis",
           icon: <FaChartBar />,
-          url: "/analysis",
+          url: "/admin/analysis",
         },
       ],
     },
@@ -40,7 +40,7 @@ export default function Sidebar() {
         {
           menu: "Colors",
           icon: <FaShoppingBag />,
-          url: "/colors",
+          url: "/admin/colors",
         },
       ],
     },

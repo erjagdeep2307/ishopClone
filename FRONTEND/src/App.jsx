@@ -10,6 +10,7 @@ import ProductView from "./Pages/Admin/Product/View";
 import Add from "./Pages/Admin/Category/Add";
 import ProductAdd from "./Pages/Admin/Product/Add";
 import Edit from "./Pages/Admin/Category/Edit";
+import NotFound from "./Pages/Admin/Error/NotFound";
 export default function App() {
   const routes = createBrowserRouter([
     {
@@ -19,6 +20,7 @@ export default function App() {
         { path: "/", element: <Dashboard /> },
         { path: "/store", element: <Store />},
         { path: "/cart", element: <Cart />},
+        { path: "/*", element: <NotFound errCode={404} /> },
       ],
     },
     {
