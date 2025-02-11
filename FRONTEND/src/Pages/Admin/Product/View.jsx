@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import { MdDelete, MdCreate } from "react-icons/md";
 import { Context } from "../../../Pages/MainContext";
 import axios from "axios";
+import Switch from "../../../Components/Admin/Switch";
 export default function View() {
   const { showToast, fetchProduct, product, BASE_URL, PRODUCT_URL } =
     useContext(Context);
@@ -86,7 +87,7 @@ export default function View() {
                         />
                       </td>
                       <td className="px-6 py-4">
-                        {item.is_active ? "Active" : "Inactive"}
+                        <Switch switchValue={item.is_active?true:false}/>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-1 text-xl items-center">

@@ -3,6 +3,7 @@ const mongoose= require('mongoose');
 const cors =require('cors');
 const CategoryRouter = require('./Routers/categoryRoutes');
 const ProductRouter = require('./Routers/productRoutes.js');
+const ColorRouter = require('./Routers/colorRoutes');
 require('dotenv').config();
 const app =  express();
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(cors(
 }))
 app.use("/category",CategoryRouter);
 app.use("/product",ProductRouter);
+app.use("/color",ColorRouter);
 mongoose.connect(process.env.MONGO_URI,{
     dbName:"Ishop"
 }).then(()=>{

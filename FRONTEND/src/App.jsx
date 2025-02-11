@@ -5,11 +5,18 @@ import Dashboard from "./Pages/Website/Dashboard";
 import Cart from "./Pages/Website/Cart";
 import Home from "./Pages/Admin/Home";
 import AdminLayout from "./Components/Admin/AdminLayout";
+// Category
 import CategoryView from "./Pages/Admin/Category/View";
+import CategoryEdit from "./Pages/Admin/Category/Edit";
+import CategoryAdd from "./Pages/Admin/Category/Add";
+// Product
 import ProductView from "./Pages/Admin/Product/View";
-import Add from "./Pages/Admin/Category/Add";
 import ProductAdd from "./Pages/Admin/Product/Add";
-import Edit from "./Pages/Admin/Category/Edit";
+// Color
+import ColorView from "./Pages/Admin/Color/View";
+import ColorAdd from "./Pages/Admin/Color/Add";
+import ColorEdit from "./Pages/Admin/Color/Edit";
+
 import NotFound from "./Pages/Admin/Error/NotFound";
 export default function App() {
   const routes = createBrowserRouter([
@@ -20,7 +27,7 @@ export default function App() {
         { path: "/", element: <Dashboard /> },
         { path: "/store", element: <Store />},
         { path: "/cart", element: <Cart />},
-        { path: "/*", element: <NotFound errCode={404} /> },
+        // { path: "/*", element: <NotFound errCode={404} /> },
       ],
     },
     {
@@ -28,14 +35,17 @@ export default function App() {
       element: <AdminLayout />,
       children: [
         { path: "", element: <Home /> },
-        { path: "category/view", element: <CategoryView />},
-        { path: "category/add", element: <Add />},
-        { path: "category/edit/:id", element: <Edit />},
-        { path: "product/view", element: <ProductView />},
+        { path: "category/", element: <CategoryView />},
+        { path: "category/add", element: <CategoryAdd />},
+        { path: "category/edit/:id", element: <CategoryEdit/>},
+        { path: "product/", element: <ProductView />},
         { path: "product/add", element: <ProductAdd />},
-        // { path: "category/edit/:id", element: <Edit />},
+        { path: "color/", element: <ColorView />},
+        { path: "color/add", element: <ColorAdd />},
+        { path: "color/edit/:id", element: <ColorEdit />},
+        { path: "*", element: <NotFound errCode={404} />},      
       ],
     }
   ]);
-  return <RouterProvider router={routes} />;
+  return <RouterProvider router={routes} />; 
 }

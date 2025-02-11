@@ -25,22 +25,22 @@ export default function Sidebar() {
         {
           menu: "categories",
           icon: <FaAlignLeft />,
-          url: "/admin/category/view",
+          url: "/admin/category",
         },
         {
           menu: "products",
           icon: <FaShoppingBag />,
-          url: "/admin/product/view",
+          url: "/admin/product",
         },
         {
           menu: "Accesseries",
           icon: <FaShoppingBag />,
-          url: "/accesseries",
+          url: "/admin/accesseries",
         },
         {
           menu: "Colors",
           icon: <FaShoppingBag />,
-          url: "/admin/colors",
+          url: "/admin/color",
         },
       ],
     },
@@ -50,10 +50,12 @@ export default function Sidebar() {
         {
           menu: "orders",
           icon: <FaShoppingBag />,
+          url: "/admin/order",
         },
         {
           menu: "transactions",
           icon: <FaShoppingBag />,
+          url: "/admin/transaction",
         },
       ],
     },
@@ -63,10 +65,12 @@ export default function Sidebar() {
         {
           menu: "orders",
           icon: <FaShoppingBag />,
+          url: "/admin/order",
         },
         {
           menu: "transactions",
           icon: <FaShoppingBag />,
+          url: "/admin/transaction",
         },
       ],
     },
