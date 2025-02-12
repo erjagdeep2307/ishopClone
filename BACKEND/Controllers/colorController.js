@@ -112,5 +112,38 @@ const ColorController = {
       res.status(403).send({ message: "Invalid Request", flag: false });
     }
   },
+  updateStatus(req, res) {
+    if (req.params.id) {
+      const id = req.params.id.trim();
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid ID format", flag: false });
+      }
+      const { status } = req.body;
+        ColorModel.updateOne(
+          {_id:id},
+          {$set: {is_active: status} }
+          )
+          .then((updateItem) => {
+            console.log(updateItem);
+            if(updateItem.modifiedCount>0){
+            res
+              .status(200)
+              .send({ message: "Color status has been updated", flag: true });
+            }
+            else{
+              res
+              .status(403)
+              .send({ message: "Record does'nt Exist", flag: false });
+            }
+          })
+          .catch((err) => {
+            res.status(503).send({ message: err.message, flag: false });
+          });
+    } else {
+      res.status(403).send({ message: "Invalid Request", flag });
+    }
+  },
 };
 module.exports = ColorController;

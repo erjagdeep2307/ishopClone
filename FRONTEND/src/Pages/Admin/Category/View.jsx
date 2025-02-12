@@ -11,6 +11,20 @@ export default function View() {
   useEffect(() => {
     fetchCategory();
   }, []);
+  const handleToggle = (id, status) => {
+    const API = BASE_URL + CATEGORY_URL + "/update/" + id + "/status";
+    axios
+      .patch(API, { status: status })
+      .then((response) => {
+        showToast(response.data.message, response.data.flag);
+        if (response.status === 200) {
+          fetchCategory();
+        }
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  }
   const handleDelete = (id, image_name) => {
     const API = BASE_URL + CATEGORY_URL + "/" + id + "/delete/" + image_name;
     axios
@@ -44,9 +58,6 @@ export default function View() {
                 Category
               </th>
               <th scope="col" className="px-6 py-3">
-                Slug
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Image
               </th>
               <th scope="col" className="px-6 py-3">
@@ -72,13 +83,14 @@ export default function View() {
                       key={key}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
-                      <th
+                      <td
                         scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex flex-col dark:text-white"
                       >
-                        {item.name}
-                      </th>
-                      <td className="px-6 py-4">{item.slug}</td>
+                        <span>Name : {item.name} </span>
+                        <span>Category: {item.category} </span>
+                        <span>Slug: {item.slug} </span>
+                      </td>
                       <td className="px-6 py-4">
                         <img
                           src={`${BASE_URL + "/images/" + item.image}`}
@@ -86,7 +98,7 @@ export default function View() {
                         />
                       </td>
                       <td className="px-6 py-4">
-                        <Switch switchValue={item.is_active ? true : false} />
+                        <Switch isOn={item.is_active} toggle={()=>{handleToggle(item._id,!item.is_active)}} />
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-1 text-xl items-center">

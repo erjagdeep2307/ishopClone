@@ -17,7 +17,7 @@ CategoryRouter.put("/update/:id",
     fileUpload(),
     CategoryController.update
 );
-CategoryRouter.patch("/change-status/:id/:new_status",);
+CategoryRouter.patch("/update/:id/status",CategoryController.updateStatus);
 CategoryRouter.delete("/:id/delete/:image_name",
     CategoryController.moveToTrash
 );

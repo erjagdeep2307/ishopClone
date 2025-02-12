@@ -10,6 +10,16 @@ export default function View() {
   useEffect(() => {
     fetchColor();
   }, []);
+  const toggleHandler = (id,status) => {
+    const API = BASE_URL + COLOR_URL + "/update/" + id + "/status";
+    axios.patch(API,{status:status})
+    .then((response)=>{
+      showToast(response.data.message,response.data.flag);
+      fetchColor();
+    }).catch((err)=>{ 
+      console.error(err.message); 
+    })
+  }
   const handleDelete = (id) => {
     axios.delete(`${BASE_URL + COLOR_URL+"/"+id}`)
     .then((response)=>{
@@ -78,7 +88,9 @@ export default function View() {
                       <span className={`bg-[${item?.code}] text-white p-1 rounded`}>{item.name}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <Switch switchValue={item.is_active ? true : false}/>
+                    <Switch isOn={item.is_active?true:false} toggle={()=>{
+                          toggleHandler(item._id, !(item.is_active));
+                        }}/>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-1 text-xl items-center">

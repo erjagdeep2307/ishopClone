@@ -11,6 +11,21 @@ export default function View() {
   useEffect(() => {
     fetchProduct();
   }, []);
+  const toggleHandler = (id, status) => {
+    const API = BASE_URL + PRODUCT_URL + "/update/" + id + "/status";
+    axios
+      .patch(API, { status: status })
+      .then((response) => {
+        showToast(response.data.message, response.data.flag);
+        if (response.status === 200) {
+          fetchProduct();
+        }
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+
+  }
   const handleDelete = (id) => {
     const API = BASE_URL + PRODUCT_URL + "/delete/" + id ;
     axios
@@ -43,9 +58,9 @@ export default function View() {
               <th scope="col" className="px-6 py-3">
                 Product
               </th>
-              <th scope="col" className="px-6 py-3">
+              {/* <th scope="col" className="px-6 py-3">
                 Slug
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Image
               </th>
@@ -72,14 +87,15 @@ export default function View() {
                       key={key}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
-                      <th
+                      <td
                         scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex flex-col dark:text-white"
                       >
-                        {item.name}
-                      </th>
-                      <td className="px-6 py-4">{item.slug}</td>
-                      <td className="px-6 py-4">
+                        <span>Name : {item.name} </span>
+                        <span>Category: {item.category} </span>
+                        <span>Slug: {item.slug} </span>
+                      </td>
+                      <td className="py-4">
                         <img
                           src={`${BASE_URL + "/images/" + item.image}`}
                           alt="No Image"
@@ -87,7 +103,9 @@ export default function View() {
                         />
                       </td>
                       <td className="px-6 py-4">
-                        <Switch switchValue={item.is_active?true:false}/>
+                        <Switch isOn={item.is_active?true:false} toggle={()=>{
+                          toggleHandler(item._id, !(item.is_active));
+                        }}/>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-1 text-xl items-center">
@@ -98,7 +116,7 @@ export default function View() {
                               handleDelete(item._id);
                             }}
                           />
-                          <Link to={`/admin/category/edit/${item._id}`}>
+                          <Link to={`/admin/product/edit/${item._id}`}>
                             <MdCreate
                               className="cursor-pointer"
                               color="#008000"

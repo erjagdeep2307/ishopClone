@@ -1,4 +1,5 @@
 const { uniqueImageName } = require("../Helper/Helper.js");
+const moongose = require("mongoose");
 const CategoryModel = require("../Models/categoryModel.js");
 const { unlinkSync } = require("fs");
 const CategoryController = {
@@ -196,6 +197,40 @@ const CategoryController = {
       res.send({
         status: 503,
         message: "System Error",
+      });
+    }
+  },
+  updateStatus(req, res) {
+    try {
+      if (req.params.id) {
+        const id = req.params.id.trim();
+        if (!moongose.Types.ObjectId.isValid(id)) {
+          return res
+            .status(400)
+            .json({ message: "Invalid ID format", flag: false });
+        }
+        const status = req.body.status;
+        CategoryModel.updateOne({ _id: id }, { $set: { is_active: status } })
+          .then((updateRecord) => {
+            if (updateRecord.modifiedCount > 0) {
+              return res
+                .status(200)
+                .send({ message: "Category status updated", flag: true });
+            } else {
+              return res
+                .status(403)
+                .send({ message: "Record does'nt exist", flag: false });
+            }
+          })
+          .catch((err) => {
+            res.status(503).send({ message: err.message, flag: false });
+          });
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(503).send({
+        message: err.message,
+        flag: false,
       });
     }
   },

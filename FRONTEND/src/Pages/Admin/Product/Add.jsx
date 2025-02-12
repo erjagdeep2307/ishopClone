@@ -90,10 +90,9 @@ export default function Add() {
         showToast(response.data.message, response.data.flag);
       })
       .catch((err) => {
-        console.log(err);
+        showToast("Request Failed",false);
       });
   };
-
   return (
     <div className="p-2">
       <div className="flex justify-between items-center border px-5 py-2 border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 ">
@@ -183,6 +182,7 @@ export default function Add() {
               <Select
                 className="w-full"
                 isMulti={true}
+                defaultValue={categoryOption}
                 options={category?.map((item) => {
                   return {
                     label:
@@ -200,6 +200,7 @@ export default function Add() {
               <Select
                 className="w-full"
                 isMulti={true}
+                defaultValue={colorOption}
                 options={color?.map((item) => {
                   return {
                     label:

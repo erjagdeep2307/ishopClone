@@ -10,4 +10,5 @@ ProductRouter.post("/create",
     ProductController.create);
 ProductRouter.get("/:id?",ProductController.read);
 ProductRouter.delete("/delete/:id/:image_url?",ProductController.moveToTrash);
+ProductRouter.patch("/update/:id/status",ProductController.updateStatus);
 module.exports = ProductRouter;
